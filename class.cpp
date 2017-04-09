@@ -1,4 +1,6 @@
 #include "class.h"
+#include <algorithm>
+using namespace std;
 
 myclass::myclass(int a, int b, int c): num1(a), num2(b), num3(c){};
 myclass::~myclass(){};
