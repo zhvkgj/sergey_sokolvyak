@@ -1,33 +1,17 @@
 #include "graph.h"
- 
 #include <iostream>
 #include <algorithm>
 #include <iterator>
- 
+using namespace std;
+
 //Functions for abstract Graph
 void graph::setSize(int size_)
 {
    size=size_;
    Resize();
 }
- 
-void graph::Output()
-{
-   for(int i=0; i<size; ++i)
-   {
-      std::copy(VecGraph[i].begin(), VecGraph[i].end(), std::ostream_iterator<int>(std::cout, " "));
-      std::cout<<std::endl;
-   }
-   for(int i=0; i<size; ++i)
-   {
-      for(int j=0; j<size; ++j)
-      {
-         if(VecGraph[i][j]==1)
-            std::cout<<i+1<<" node is connected with "<< j+1 <<" node.\n";
-      }
-   }
-}
- 
+
+
 void graph::Resize()
 {
    VecGraph.resize(size);
@@ -39,18 +23,25 @@ void graph::Resize()
 //Functions for hand writing
 void handWriteGraph::Input()
 {
-   for(int i=0; i<size; ++i)
-   {
-      for(int j=0; j<size; ++j)
-      {
+    int number;
+    cout << "Введите кол-во вершин:"<<endl;
+    cin >> number;
+    setSize(number);
+    cout << "Введите названия вершин:"<<endl;
+    char* names_versh = new char[size];
+    cin << names_versh;
+    cout << "Введите номера вершины истока и стока:"<< endl;
+    cin >> s >> t;
+    for(int i=0; i<size; ++i){
+      for(int j=0; j<size; ++j){
          std::cout<<"Введите пропускную способность дуги из  "<< i+1 <<" вершины в"<< j+1 <<" вершину: ";
          std::cin>>VecGraph[i][j];
       }
-   }
+    }
 }
 //Function for text file 
 void fileReadGraph::Input() {// построение графа на основе матрицы смежности из файла
-    char buff[255];
+    char buff[255] = "";
     for (int i=0;i<=255;i++) buff[i]=*""; // обнуляем связующую строку
     //const char* a = "C:\\test.txt";
     ifstream fin("C:\\test.txt");
@@ -84,3 +75,4 @@ void fileReadGraph::Input() {// построение графа на основ�
     }
     fin.close();
 }
+
