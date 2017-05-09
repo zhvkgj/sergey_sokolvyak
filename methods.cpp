@@ -40,11 +40,7 @@ void fileReadGraph::Input() {// построение графа на основ�
     fin.close();
 }
 
-void graph::Output(){
-    ofstream fout("C:\\result_test.txt", ios_base::trunc);
-    fout <<  //запись в файл строки с названиями вершин
-    }
-} 
+
 ////////////////////////////////////////// алгоритм Диница
 bool bfs() {
 	int qh=0, qt=0;
@@ -89,7 +85,7 @@ int dinic() {
 	return flow;
 }
 
-void Result(){
+void Output_result(){
     ofstream fout("C:\\result_test.txt", ios_base::trunc);
     fout <<  //запись в файл строки с названиями вершин
 }
