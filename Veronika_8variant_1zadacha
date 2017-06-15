@@ -1,0 +1,122 @@
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class calendar {
+private:
+	int day;
+	int month;	//будем считать, что в месяце 30 дней
+	int year;
+	string name_month;
+public:
+	calendar() {
+		day = 0;
+		month = 0;
+		year = 0;
+	};
+	calendar(int a, int b, int c) :day(a), month(b), year(c) {};
+	~calendar() {};
+	void set_info();
+	void change_date(int a);
+	friend ostream& operator<<(ostream& os, const calendar& dt);
+	calendar operator-(calendar &other);
+
+};
+ostream& operator<<(ostream& os, const calendar& dt) {
+	os<<dt.day<<'/'<<dt.month<<'('<<dt.name_month<<')'<<'/'<<dt.year<<'\n';
+	return os;
+}
+
+calendar calendar::operator-(calendar &other) {
+	int sum, sum1, sum2;
+	int a, b, c;
+	sum1 = day + month * 30 + 365 * year;
+	sum2 = other.day + other.month * 30 + other.year * 365;
+	if (sum1 > sum2) sum = sum1 - sum2;
+	else sum = sum2 - sum1;
+	a = sum / 365;
+	b = (sum % 365) / 30;
+	c = (sum % 365) % 30;
+	return calendar(c, b, a);
+}
+
+void calendar::change_date(int a) {
+	day += a;
+	if (day > 30) {
+		month += day / 30;
+		day = day % 30;
+		if (day == 0) {
+			day = 30;
+			month = month - 1;
+		}
+		if (month > 12) {
+			year += month / 12;
+			month = month % 12;
+		}
+		if (month == 0) {
+			month = 12;
+			year = year - 1;
+		}
+	}
+}
+
+void calendar::set_info() {
+	int num;
+	cout << "Введите день. ";
+	cin >> day;
+	cout << "Введите 1, если месяц будет задан по названию и 0, если по номеру. ";
+	cin >> num;
+	if (num)
+		cin >> name_month;
+	else
+		cin >> month;
+	cout << "Введите год. ";
+	cin >> year;
+	if (num == 1) {
+		if (name_month == "january") month = 1;
+		if (name_month == "fabruary") month = 2;
+		if (name_month == "march") month = 3;
+		if (name_month == "april") month = 4;
+		if (name_month == "may") month = 5;
+		if (name_month == "june") month = 6;
+		if (name_month == "july") month = 7;
+		if (name_month == "august") month = 8;
+		if (name_month == "september") month = 9;
+		if (name_month == "october") month = 10;
+		if (name_month == "november") month = 11;
+		if (name_month == "decamber") month = 12;
+	}
+	else {
+		switch (month) {
+		case 1: name_month = "january"; break;
+		case 2: name_month = "february"; break;
+		case 3: name_month = "march"; break;
+		case 4: name_month = "april"; break;
+		case 5: name_month = "may"; break;
+		case 6: name_month = "june"; break;
+		case 7: name_month = "july"; break;
+		case 8: name_month = "august"; break;
+		case 9: name_month = "september"; break;
+		case 10: name_month = "october"; break;
+		case 11: name_month = "november"; break;
+		case 12: name_month = "december"; break;
+		default: cout << "Что-то пошло не так!"; break;
+		}
+	}
+}
+
+int main()
+{
+	setlocale(LC_ALL, "");
+	calendar Data1;
+	calendar Data2;
+	Data1.set_info();
+	Data2.set_info();
+	calendar Data3;
+	Data3 = Data2 - Data1;
+	cout << Data3;
+	system("pause");
+	return 0;
+}
