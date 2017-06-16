@@ -1,0 +1,134 @@
+#include "stdafx.h"
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+class int_vector {
+private:
+	int* array; // указатель на первый элемент массива
+	
+public:
+	size_t size;
+	int_vector(size_t a);
+	~int_vector();
+	void search(int a);
+	void vec_sort();
+	void set_vec();
+	int_vector operator+(int_vector &other);
+	int_vector operator-(int_vector &other);
+	int& operator[](size_t i);
+
+};
+
+int_vector::int_vector(size_t s = 1):size(s), array(new int[s]){  
+	for (size_t i = 0; i < s; i++)
+		array[i] = 0;
+}		// конструктор
+
+int_vector::~int_vector() {
+	delete[] array;
+}		// деструктор
+
+int_vector int_vector::operator+(int_vector &other) {
+	int_vector temp(max(size, other.size));
+	if (size > other.size) {
+		for (size_t i = 0; i < other.size; i++) {
+			temp.array[i] = array[i] + other.array[i];
+		}
+		for (size_t i = other.size; i < size; i++)
+			temp.array[i] = array[i];
+	}
+	else {
+		for (size_t i = 0; i < size; i++) {
+			temp.array[i] = array[i] + other.array[i];
+		}
+		if (size != other.size){
+			for (size_t i = size; i < other.size; i++)
+				temp.array[i] = other.array[i];
+		}
+	}
+	return temp;
+} // сумма векторов
+
+int_vector int_vector::operator-(int_vector &other) {
+	int_vector temp(max(size, other.size));
+	if (size > other.size) {
+		for (size_t i = 0; i < other.size; i++) {
+			temp.array[i] = array[i] - other.array[i];
+		}
+		for (size_t i = other.size; i < size; i++)
+			temp.array[i] = array[i];
+	}
+	else {
+		for (size_t i = 0; i < size; i++) {
+			temp.array[i] = array[i] - other.array[i];
+		}
+		if (size != other.size) {
+			for (size_t i = size; i < other.size; i++)
+				temp.array[i] = other.array[i];
+		}
+	}
+	return temp;
+} //разность векторов
+
+void int_vector::search(int a) {
+	int k = 0;
+	for (int i = 0; i < size; i++) {
+		if (array[i] = a) 
+			k++;
+	}
+	if (k != 0)
+		cout << "Такой элемент в массиве есть! ";
+	else
+		cout << "Такого элемента в массиве нет! ";
+}
+
+void int_vector::vec_sort(){ // сортировка пузырьком
+	int temp = 0; 
+	bool exit = false; 
+	while (!exit){ // пока массив не отсортирован
+		exit = true;
+		for (int int_counter = 0; int_counter < (size - 1); int_counter++) 
+		//сортировка пузырьком по возрастанию - знак >
+		//сортировка пузырьком по убыванию - знак <
+		if (array[int_counter] > array[int_counter + 1]){ 
+			// выполняем перестановку элементов массива
+			temp = array[int_counter];
+			array[int_counter] = array[int_counter + 1];
+			array[int_counter + 1] = temp;
+			exit = false;
+		}
+	}
+}
+
+void int_vector::set_vec() {
+	cout << "Заполните массив целыми числами: ";
+	for (int i = 0; i < size; i++) {
+		cin >> array[i];
+	}
+}
+
+int& int_vector::operator [](size_t i){ 
+	if (i >= size) {
+		cout << "Вы вышли за пределы массива! Последний элемент массива имеет номер: ";
+		cout << size <<'\n';
+		cout << "А его значение: ";
+		return array[size];
+	}
+	else
+		return array[i]; 
+}		
+// тестовый алгоритм
+int main()
+{
+	setlocale(LC_ALL, "");
+	int_vector Vector1(4);
+	int_vector Vector(3);
+	Vector.set_vec();
+	Vector1.set_vec();
+	Vector1.vec_sort();
+	cout << Vector1[0] << ',' << Vector1[1] << ','<< Vector1[2] << '\n';
+	system("pause");
+	return 0;
+}
