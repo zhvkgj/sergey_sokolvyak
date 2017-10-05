@@ -1,0 +1,115 @@
+#include "stdafx.h"
+#include <thread>
+#include <mutex>
+#include <atomic>
+#include <iostream>
+#include <vector>
+
+void merge(int*, int*, int, int, int);
+void merge_sort(int*, int*, int, int);
+std:: atomic <int> value;
+std::vector <std::thread> threads;
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	//задал массив
+	int n;
+	std::cin >> n;
+	int *arr = new int[n];
+	int *buff = new int[n];
+	for (int i = 0; i < n; i++)
+	{
+		std::cin >> arr[i];
+	}
+	//запуск потоков
+	for (int i = 0; i < n / 2; i++){
+		int* buff = new int[n];
+		int t = 2 * i + 1;
+		if (t >= n) t = n - 1;
+		threads.push_back(std::thread(merge_sort,arr,buff,2*i,t));
+		value++;
+	}
+
+	for (auto& thread : threads){
+		thread.join();
+		value--;
+	}
+
+	while (!value){
+		std::cout << "SORTING" << std::endl;
+	}
+	
+	//сливаем отсортированные куски
+	for (int i = 0; i < n / 2; i++){
+		merge(arr,buff,2*i,2)
+	}
+
+	//выводим
+	for (int i = 0; i < n; i++)
+	{
+		std::cout << arr[i] << " ";
+	}
+
+	system("pause");
+	return 0;
+}
+
+void merge(int* arr, int* buff, int left, int middle, int right){
+	int it_left = 0;
+	int it_right = 0;
+
+	while (left + it_left < middle && middle + it_right < right)
+		{
+			if (arr[left + it_left] < arr[middle + it_right])
+			{
+				buff[it_left + it_right] = arr[left + it_left];
+				it_left++;
+			}
+			else
+			{
+				buff[it_left + it_right] = arr[middle + it_right];
+				it_right++;
+			}
+		}
+
+		//Записываем оставшиеся части, невыписанные из array
+	while (left + it_left < middle)
+		{
+			buff[it_left + it_right] = arr[left + it_left];
+			it_left++;
+		}
+
+	while (middle + it_right < right)
+		{
+			buff[it_left + it_right] = arr[middle + it_right];
+			it_right++;
+		}
+
+		//Выписываем buffer в array
+	for (int i = 0; i < it_left + it_right; i++)
+		arr[left + i] = buff[i];
+	}
+
+//array - массив
+//buffer - буфер для сортировки, размером не меньше, чем array
+//left - нижняя граница, right - верхняя
+
+void merge_sort(int* array, int* buffer, int left, int right)
+{
+	//Массив единичного размера уже отсортированым считается
+	if (right - left <= 1)
+	{
+		return;
+	}
+
+	//Индекс серединного элемента
+	int middle = left + (right - left) / 2;
+
+	//Сортируем половинки массива
+	merge_sort(array, buffer, left, middle);
+	merge_sort(array, buffer, middle, right);
+
+	//Составляем из двух отсортированных половинок
+	//Целый отсортированный массив
+	merge(array, buffer, left, middle, right);
+}
