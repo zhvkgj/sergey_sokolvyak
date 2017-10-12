@@ -1,0 +1,42 @@
+#include "stdafx.h"
+#include <thread>
+#include <iostream>
+#include <mutex>
+
+template <class T> class Atomic{
+	mutex mutex;
+	T value;
+	T get_value(T value_= 0);
+	T set_value(T value_);
+public:
+	Atomic(T value_ = 0): value(value_){};
+
+	T exchange(T (*method)(T , T ));
+
+	// operators
+
+	friend Atomic<T> operator+ (Atomic<T> z1, Atomic<T> z2);
+	friend Atomic<T> operator- (Atomic<T> z1, Atomic<T> z2);
+	friend Atomic<T> operator* (Atomic<T> z1, Atomic<T> z2);
+	friend Atomic<T> operator/ (Atomic<T> z1, Atomic<T> z2);
+		
+};
+
+template<class T>
+T exchange(Atomic<T> &temp, T (*method)(),T value_){
+	mutex.lock();
+	temp.method(T value_);
+	mutex.unlock();
+}
+
+template<class T> T get_value(){ return value; }
+
+template<class T> T set_value(T value_){ value = value_; return 0}
+
+
+
+int main()
+{
+	
+	return 0;
+}
