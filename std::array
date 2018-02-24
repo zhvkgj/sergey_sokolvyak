@@ -1,0 +1,47 @@
+#include <iostream>
+
+//STL
+#include <array>  //контейнер для c-style массива, ничего более
+#include <algorithm>
+#include <iterator>
+
+using namespace std;
+
+void display(char* str)
+{
+	cout << str << endl;
+}
+
+int main()
+{
+
+	array<char*, 3> arr;
+	//Empty работает не совсем обычно! (совсем не обычно)
+	if (!arr.empty())
+	{
+		arr[0] = (char*)"String 1";
+		//arr.at(1) = (char*)"String 2";
+		arr.at(2) = (char*)"String 3";
+	}
+
+	cout << "Array size: " << arr.size() << endl;
+	cout << "Array max size: " << arr.max_size() << endl;
+
+	//Method get
+	cout << get<1>(arr) << endl;
+
+	// Создание итераторов 
+	auto iterStart = arr.begin();
+	auto iterEnd = arr.end();
+
+	// Создание обратных итераторов 
+	auto RiterStart = arr.rbegin();
+	auto RiterEnd = arr.rend();
+
+	for_each(iterStart, iterEnd, display);
+
+	arr.fill((char*)"fill");
+	cout << endl;
+
+	for_each(RiterStart, RiterEnd, display);
+}
